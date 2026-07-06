@@ -41,6 +41,11 @@ main {
   padding: 2rem;
 }
 
+#projects {
+  position: relative;
+  overflow: hidden;
+}
+
 #projects h2 {
   font-size: 1.5rem;
   color: #f0f6fc;
@@ -53,6 +58,9 @@ main {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 1.5rem;
+  max-height: 480px;
+  overflow-y: auto;
+  padding-bottom: 1rem;
 }
 
 .project-card {
