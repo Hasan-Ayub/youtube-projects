@@ -47,20 +47,20 @@
       letter-spacing: -0.5px;
     }
 
-    nav .links {
-      display: flex;
-      gap: 2rem;
-    }
-
-    nav .links a {
-      color: rgba(255,255,255,0.7);
-      text-decoration: none;
-      font-size: 0.9rem;
-      transition: color 0.2s;
-    }
-
-    nav .links a:hover {
+    nav .yt-btn {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
       color: #fff;
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 600;
+      padding: 0.5rem 1.25rem;
+      border-radius: 999px;
+      transition: background 0.25s;
+    }
+
+    nav .yt-btn:hover {
+      background: rgba(255,255,255,0.2);
     }
 
     main {
@@ -173,11 +173,7 @@
   <div class="content">
     <nav>
       <span class="logo">HA</span>
-      <div class="links">
-        <a href="#work">Work</a>
-        <a href="#about">About</a>
-        <a href="#contact">Contact</a>
-      </div>
+      <a class="yt-btn" href="https://www.youtube.com/@HasanAyub-n7v" target="_blank" rel="noopener">YouTube</a>
     </nav>
 
     <main>
