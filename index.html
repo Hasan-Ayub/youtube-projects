@@ -199,9 +199,9 @@
       <h2>Projects</h2>
       <p class="sub">Some things I've built</p>
       <div class="cards">
-        <div class="card">
-          <h3>Project Alpha</h3>
-          <p>Full-stack application built with modern tools and thoughtful design.</p>
+        <div class="card" onclick="document.getElementById('nrf-project').scrollIntoView({behavior:'smooth'})" style="cursor:pointer">
+          <h3>nRF24L01 Transmitter & Receiver</h3>
+          <p>Wireless data transmission between two Arduino Nanos using nRF24L01 modules. Full DIY guide with code.</p>
         </div>
         <div class="card">
           <h3>Project Beta</h3>
@@ -211,6 +211,41 @@
           <h3>Project Gamma</h3>
           <p>Developer tooling that streamlines complex workflows.</p>
         </div>
+      </div>
+    </section>
+
+    <section id="nrf-project" style="padding-top:2rem">
+      <h2>nRF24L01 Wireless Transmitter & Receiver</h2>
+      <p class="sub">DIY wireless data transmission with Arduino Nano</p>
+
+      <div style="max-width:560px; margin:0 auto 2rem">
+        <div style="position:relative; padding-bottom:56.25%; height:0; overflow:hidden; border-radius:12px; border:1px solid rgba(255,255,255,0.1)">
+          <iframe style="position:absolute; top:0; left:0; width:100%; height:100%"
+            src="https://www.youtube.com/embed/dN4TZUvFjcY"
+            title="DIY nRF24L01 Transmitter & Receiver with Arduino Nano"
+            frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+          </iframe>
+        </div>
+      </div>
+
+      <div style="background:rgba(255,255,255,0.05); backdrop-filter:blur(12px); border:1px solid rgba(255,255,255,0.1); border-radius:12px; padding:1.75rem; max-width:640px; margin:0 auto 1.5rem">
+        <h3 style="margin-bottom:0.75rem">Code</h3>
+        <p style="color:rgba(255,255,255,0.6); line-height:1.7; margin-bottom:1rem">
+          Arduino Nano sketch to test and verify nRF24L01 module detection.<br>
+          Download the file below and open it in Arduino IDE.
+        </p>
+        <a class="btn" href="Projects/Nrf%20Transmitter/Nrf2401_Test-code/Nrf2401_Test-code.ino" download style="font-size:0.85rem; padding:0.6rem 1.5rem">
+          Download nRF24L01_Test_Code.ino
+        </a>
+      </div>
+
+      <div style="background:rgba(255,255,255,0.05); backdrop-filter:blur(12px); border:1px solid rgba(255,255,255,0.1); border-radius:12px; padding:1.75rem; max-width:640px; margin:0 auto">
+        <h3 style="margin-bottom:0.75rem">Note</h3>
+        <p style="color:rgba(255,255,255,0.6); line-height:1.7">
+          Make sure both the transmitter and receiver have the same channel and data rate settings.
+          The nRF24L01 modules require a stable 3.3V supply — use a decoupling capacitor (10µF–100µF)
+          near the module's VCC pin to avoid communication dropouts.
+        </p>
       </div>
     </section>
 
