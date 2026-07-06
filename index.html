@@ -177,76 +177,6 @@
       border-top: 1px solid rgba(255,255,255,0.06);
     }
 
-    /* ── CardSwap ── */
-    .card-swap-wrap {
-      position: relative;
-      width: 100%;
-      height: 620px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    .card-swap-container {
-      position: absolute;
-      bottom: 0;
-      right: 0;
-      transform: translate(5%, 20%);
-      transform-origin: bottom right;
-      perspective: 900px;
-      overflow: visible;
-    }
-    .card-swap-container > .card {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      border-radius: 16px;
-      border: 1px solid rgba(255,255,255,0.15);
-      background: #120F17;
-      transform-style: preserve-3d;
-      will-change: transform;
-      backface-visibility: hidden;
-      -webkit-backface-visibility: hidden;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      padding: 1.5rem;
-      cursor: pointer;
-      transition: border-color 0.3s;
-    }
-    .card-swap-container > .card:hover {
-      border-color: rgba(132,0,255,0.5);
-    }
-    .card-swap-container > .card .short-thumb {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      opacity: 0.5;
-    }
-    .card-swap-container > .card .short-label {
-      position: relative;
-      z-index: 1;
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: #fff;
-      text-shadow: 0 2px 10px rgba(0,0,0,0.8);
-    }
-    .card-swap-container > .card .short-title {
-      position: relative;
-      z-index: 1;
-      font-size: 0.75rem;
-      color: rgba(255,255,255,0.7);
-      margin-top: 0.25rem;
-      text-shadow: 0 2px 10px rgba(0,0,0,0.8);
-    }
-    @media (max-width: 768px) {
-      .card-swap-container { transform: scale(0.75) translate(25%, 25%); }
-    }
-    @media (max-width: 480px) {
-      .card-swap-container { transform: scale(0.55) translate(25%, 25%); }
-    }
   </style>
 </head>
 <body>
@@ -282,12 +212,6 @@
 
 
 
-    <section id="shorts">
-      <h2>My Shorts</h2>
-      <p class="sub">Quick videos & experiments</p>
-      <div class="card-swap-wrap" id="card-swap-root"></div>
-    </section>
-
     <section id="about">
       <h2>About</h2>
       <p class="sub">Who I am</p>
@@ -306,8 +230,6 @@
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
-  <script src="https://unpkg.com/gsap@3.12.5/dist/gsap.min.js"></script>
-
   <script type="text/babel">
     const { useRef, useEffect } = React;
 
@@ -1296,130 +1218,6 @@
       />
     );
 
-    /* ── CardSwap ── */
-    const { forwardRef: fwdRef } = React;
-
-    const Card = fwdRef(({ customClass, children, style, ...rest }, ref) => (
-      <div ref={ref} className={`card ${customClass ?? ''} ${rest.className ?? ''}`.trim()} style={style} {...rest}>
-        {children}
-      </div>
-    ));
-
-    const makeSlot = (i, distX, distY, total) => ({
-      x: i * distX,
-      y: -i * distY,
-      z: -i * distX * 1.5,
-      zIndex: total - i
-    });
-
-    const placeNow = (el, slot, skew) =>
-      gsap.set(el, {
-        x: slot.x, y: slot.y, z: slot.z,
-        xPercent: -50, yPercent: -50, skewY: skew,
-        transformOrigin: 'center center',
-        zIndex: slot.zIndex, force3D: true
-      });
-
-    const CardSwap = ({
-      width = 500, height = 400,
-      cardDistance = 60, verticalDistance = 70,
-      delay = 5000, pauseOnHover = false,
-      onCardClick, skewAmount = 6,
-      easing = 'elastic', children
-    }) => {
-      const config = easing === 'elastic'
-        ? { ease: 'elastic.out(0.6,0.9)', durDrop: 2, durMove: 2, durReturn: 2, promoteOverlap: 0.9, returnDelay: 0.05 }
-        : { ease: 'power1.inOut', durDrop: 0.8, durMove: 0.8, durReturn: 0.8, promoteOverlap: 0.45, returnDelay: 0.2 };
-
-      const childArr = useMemo(() => React.Children.toArray(children), [children]);
-      const refs = useMemo(() => childArr.map(() => React.createRef()), [childArr.length]);
-      const order = useRef(Array.from({ length: childArr.length }, (_, i) => i));
-      const tlRef = useRef(null);
-      const intervalRef = useRef();
-      const container = useRef(null);
-
-      useEffect(() => {
-        const total = refs.length;
-        refs.forEach((r, i) => placeNow(r.current, makeSlot(i, cardDistance, verticalDistance, total), skewAmount));
-
-        const swap = () => {
-          if (order.current.length < 2) return;
-          const [front, ...rest] = order.current;
-          const elFront = refs[front].current;
-          const tl = gsap.timeline();
-          tlRef.current = tl;
-          tl.to(elFront, { y: '+=500', duration: config.durDrop, ease: config.ease });
-          tl.addLabel('promote', `-=${config.durDrop * config.promoteOverlap}`);
-          rest.forEach((idx, i) => {
-            const el = refs[idx].current;
-            const slot = makeSlot(i, cardDistance, verticalDistance, refs.length);
-            tl.set(el, { zIndex: slot.zIndex }, 'promote');
-            tl.to(el, { x: slot.x, y: slot.y, z: slot.z, duration: config.durMove, ease: config.ease }, `promote+=${i * 0.15}`);
-          });
-          const backSlot = makeSlot(refs.length - 1, cardDistance, verticalDistance, refs.length);
-          tl.addLabel('return', `promote+=${config.durMove * config.returnDelay}`);
-          tl.call(() => gsap.set(elFront, { zIndex: backSlot.zIndex }), undefined, 'return');
-          tl.to(elFront, { x: backSlot.x, y: backSlot.y, z: backSlot.z, duration: config.durReturn, ease: config.ease }, 'return');
-          tl.call(() => { order.current = [...rest, front]; });
-        };
-
-        swap();
-        intervalRef.current = window.setInterval(swap, delay);
-
-        if (pauseOnHover) {
-          const node = container.current;
-          const pause = () => { tlRef.current?.pause(); clearInterval(intervalRef.current); };
-          const resume = () => { tlRef.current?.play(); intervalRef.current = window.setInterval(swap, delay); };
-          node.addEventListener('mouseenter', pause);
-          node.addEventListener('mouseleave', resume);
-          return () => { node.removeEventListener('mouseenter', pause); node.removeEventListener('mouseleave', resume); clearInterval(intervalRef.current); };
-        }
-        return () => clearInterval(intervalRef.current);
-      }, [cardDistance, verticalDistance, delay, pauseOnHover, skewAmount, easing]);
-
-      const rendered = childArr.map((child, i) =>
-        React.isValidElement(child)
-          ? React.cloneElement(child, {
-              key: i, ref: refs[i],
-              style: { width, height, ...(child.props.style ?? {}) },
-              onClick: e => { child.props.onClick?.(e); onCardClick?.(i); }
-            })
-          : child
-      );
-
-      return <div ref={container} className="card-swap-container" style={{ width, height }}>{rendered}</div>;
-    };
-
-    const shortsRoot = ReactDOM.createRoot(document.getElementById('card-swap-root'));
-    shortsRoot.render(
-      <div style={{ height: '600px', position: 'relative' }}>
-        <CardSwap
-          cardDistance={60} verticalDistance={70} delay={5000} pauseOnHover={false}
-          onCardClick={i => {
-            const links = [
-              'https://youtube.com/shorts/f_NuyCiaVh4',
-              'https://youtube.com/@HasanAyub-n7v',
-              'https://youtube.com/@HasanAyub-n7v'
-            ];
-            window.open(links[i], '_blank');
-          }}
-        >
-          <Card>
-            <img className="short-thumb" src="https://i.ytimg.com/vi/f_NuyCiaVh4/hqdefault.jpg" alt="" />
-            <div className="short-label">nRF24L01 Transmitter</div>
-            <div className="short-title">Full video: DIY nRF24L01 Transmitter & Receiver → youtu.be/dN4TZUvFjcY</div>
-          </Card>
-          <Card>
-            <div className="short-label">Coming Soon</div>
-            <div className="short-title">New short on the way</div>
-          </Card>
-          <Card>
-            <div className="short-label">Coming Soon</div>
-            <div className="short-title">Stay tuned</div>
-          </Card>
-        </CardSwap>
-      </div>
-    );
   </script>
 </body>
 </html>
