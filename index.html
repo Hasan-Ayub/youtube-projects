@@ -36,18 +36,17 @@
 
     nav {
       display: flex;
-      justify-content: space-between;
+      justify-content: flex-end;
       align-items: center;
       padding: 1.5rem 3rem;
     }
 
-    nav .logo {
-      font-size: 1.25rem;
-      font-weight: 700;
-      letter-spacing: -0.5px;
+    nav .nav-links {
+      display: flex;
+      gap: 0.75rem;
     }
 
-    nav .yt-btn {
+    nav .glass-btn {
       background: rgba(255,255,255,0.08);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
@@ -62,7 +61,7 @@
       transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
     }
 
-    nav .yt-btn:hover {
+    nav .glass-btn:hover {
       background: rgba(255,255,255,0.15);
       box-shadow: 0 0 30px rgba(255,255,255,0.06), inset 0 0 0 1px rgba(255,255,255,0.1);
       transform: translateY(-1px);
@@ -184,8 +183,10 @@
 
   <div class="content">
     <nav>
-      <span class="logo">HA</span>
-      <a class="yt-btn" href="https://www.youtube.com/@HasanAyub-n7v" target="_blank" rel="noopener">YouTube</a>
+      <div class="nav-links">
+        <a class="glass-btn" href="https://www.youtube.com/@HasanAyub-n7v" target="_blank" rel="noopener">YouTube</a>
+        <a class="glass-btn" href="https://www.instagram.com/hasan_ayub8/" target="_blank" rel="noopener">Instagram</a>
+      </div>
     </nav>
 
     <main>
