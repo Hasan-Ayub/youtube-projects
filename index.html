@@ -1393,11 +1393,21 @@
     const shortsRoot = ReactDOM.createRoot(document.getElementById('card-swap-root'));
     shortsRoot.render(
       <div style={{ height: '600px', position: 'relative' }}>
-        <CardSwap cardDistance={60} verticalDistance={70} delay={5000} pauseOnHover={false}>
+        <CardSwap
+          cardDistance={60} verticalDistance={70} delay={5000} pauseOnHover={false}
+          onCardClick={i => {
+            const links = [
+              'https://youtube.com/shorts/f_NuyCiaVh4',
+              'https://youtube.com/@HasanAyub-n7v',
+              'https://youtube.com/@HasanAyub-n7v'
+            ];
+            window.open(links[i], '_blank');
+          }}
+        >
           <Card>
-            <img className="short-thumb" src="https://i.ytimg.com/vi/dN4TZUvFjcY/hqdefault.jpg" alt="" />
-            <div className="short-label">nRF24L01 Test</div>
-            <div className="short-title">Wireless module check</div>
+            <img className="short-thumb" src="https://i.ytimg.com/vi/f_NuyCiaVh4/hqdefault.jpg" alt="" />
+            <div className="short-label">nRF24L01 Transmitter</div>
+            <div className="short-title">Full video: DIY nRF24L01 Transmitter & Receiver → youtu.be/dN4TZUvFjcY</div>
           </Card>
           <Card>
             <div className="short-label">Coming Soon</div>
