@@ -142,6 +142,19 @@
       font-size: 0.85rem;
       border-top: 1px solid rgba(255,255,255,0.06);
     }
+    .count-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      margin-left: 0.75rem;
+      padding: 0.15rem 0.6rem;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.08);
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: rgba(255,255,255,0.6);
+      white-space: nowrap;
+    }
   </style>
 </head>
 <body>
@@ -166,18 +179,20 @@
       <div class="box">
         <h2>Code</h2>
         <p>Arduino Nano sketch to test and verify nRF24L01 module detection. Download and open it in Arduino IDE.</p>
-        <a class="download-btn" href="../Projects/Nrf%20Transmitter/Nrf2401_Test-code/Nrf2401_Test-code.ino" download>
+        <a class="download-btn" href="../Projects/Nrf%20Transmitter/Nrf2401_Test-code/Nrf2401_Test-code.ino" download data-count-key="nrf-code-ino">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           Download .ino File
+          <span class="count-badge" id="count-nrf-code-ino">0</span>
         </a>
       </div>
 
       <div class="box">
         <h2>Gerber Files (Receiver PCB)</h2>
         <p>Download the Gerber files for the receiver PCB. Upload the zip file directly to your PCB manufacturer for fabrication.</p>
-        <a class="download-btn" href="../Projects/Nrf%20Transmitter/Gerber_Reciever_PCB_Reciever_2026-07-07.zip" download>
+        <a class="download-btn" href="../Projects/Nrf%20Transmitter/Gerber_Reciever_PCB_Reciever_2026-07-07.zip" download data-count-key="nrf-gerber-zip">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
           Download Gerber ZIP
+          <span class="count-badge" id="count-nrf-gerber-zip">0</span>
         </a>
       </div>
 
@@ -234,6 +249,28 @@
       return <div ref={mountRef} style={{ position: 'absolute', inset: 0 }} />;
     };
     ReactDOM.createRoot(document.getElementById('bg')).render(<LiquidEther />);
+  </script>
+  <script>
+    (function() {
+      var api = 'https://api.countapi.xyz';
+      var ns = 'hasan-ayub-github-io';
+      var btns = document.querySelectorAll('.download-btn[data-count-key]');
+      btns.forEach(function(btn) {
+        var key = btn.getAttribute('data-count-key');
+        var badge = document.getElementById('count-' + key);
+        if (!badge) return;
+        fetch(api + '/get/' + ns + '/' + key)
+          .then(function(r) { return r.json(); })
+          .then(function(d) { if (d.value !== undefined) badge.textContent = d.value; })
+          .catch(function() {});
+        btn.addEventListener('click', function() {
+          fetch(api + '/hit/' + ns + '/' + key)
+            .then(function(r) { return r.json(); })
+            .then(function(d) { if (d.value !== undefined) badge.textContent = d.value; })
+            .catch(function() {});
+        });
+      });
+    })();
   </script>
 </body>
 </html>

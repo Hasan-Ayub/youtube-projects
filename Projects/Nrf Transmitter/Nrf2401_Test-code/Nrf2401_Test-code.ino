@@ -1,9 +1,18 @@
-String var = "my name is hassan \n";
+#include <SPI.h>
+#include <nRF24L01.h>
+int speed;
+const byte address[6] = "00001";
+RF24 radio(9, 10);
+
 void setup(){
-  Serial.begin(9600);
-  Serial.print(var);
+  radio.begin();
+  radio.openreadingpipe(1, address);
+  radio.startlistening();
 }
 void loop(){
-Serial.print(var);
-
+  radio.available(){
+    radio.read(&speed, sizeof(speed));
+    serial.println("throttle is =  ", speed)
+  }
+  
 }
